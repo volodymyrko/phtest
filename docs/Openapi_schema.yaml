@@ -1,0 +1,169 @@
+openapi: 3.0.1
+info:
+  title: Test Announcement API
+  description: Api Description
+  version: '0.1'
+servers:
+  - url: 'https://9zy07g9e68.execute-api.eu-west-1.amazonaws.com'
+paths:
+  /prod/announcements/017265e5-636e-4fe8-83d5-447c31123d99:
+    get:
+      description: Get specific announcement
+      responses:
+        '200':
+          description: announcement info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  date:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  uuid:
+                    type: string
+              examples:
+                '0':
+                  value: >-
+                    {"uuid": "017265e5-636e-4fe8-83d5-447c31123d99", "date":
+                    "2021-05-20", "description": "announcment description", "name":
+                    "name of announcement"}
+        '404':
+          description: Announcement not found
+      servers:
+        - url: 'https://9zy07g9e68.execute-api.eu-west-1.amazonaws.com'
+    servers:
+      - url: 'https://9zy07g9e68.execute-api.eu-west-1.amazonaws.com'
+  /prod/announcements:
+    get:
+      description: Get all announcements
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: string
+          example: '2'
+        - name: last_evaluated_key
+          in: query
+          schema:
+            type: string
+          example: '2'
+      responses:
+        '200':
+          description: A list of announcements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  last_evaluated_key:
+                    type: string
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        uuid:
+                          type: string
+              examples:
+                '0':
+                  value: >-
+                    {"items": [{"uuid": "1f96e45b-c40a-4c70-b8a0-5ab53dfe6129",
+                    "date": "2021-05-20", "description": "desc2", "name":
+                    "pm1"}, {"uuid": "da56e640-7fb8-4118-aa0c-dc072d37f6f7",
+                    "date": "2021-05-03", "description": "desc 3", "name": "nann
+                    4"}], "last_evaluated_key":
+                    "da56e640-7fb8-4118-aa0c-dc072d37f6f7"}
+        '400':
+          description: Incorrect query parameters.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        loc:
+                          type: array
+                          items:
+                            type: string
+                        msg:
+                          type: string
+                        type:
+                          type: string
+      servers:
+        - url: 'https://9zy07g9e68.execute-api.eu-west-1.amazonaws.com'
+    post:
+      description: Create announcement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+            examples:
+              '0':
+                value: >-
+                  {"name": "name 5", "description": "desc 5", "date":
+                  "2021-05-05"}
+      responses:
+        '201':
+          description: created announcement
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  date:
+                    type: string
+              examples:
+                '0':
+                  value: >-
+                    {"uuid": "2b749535-99c9-4ff2-98a9-50c971c5e952", "name":
+                    "name 5", "description": "desc 5", "date": "2021-05-05"}
+        '400':
+          description: Incorrect request data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        loc:
+                          type: array
+                          items:
+                            type: string
+                        msg:
+                          type: string
+                        type:
+                          type: string
+      servers:
+        - url: 'https://9zy07g9e68.execute-api.eu-west-1.amazonaws.com'

@@ -1,0 +1,11 @@
+AWS CDK allows to create and provision cloud infrastructure in a easier way compared with another tools. It provides high level interface to setup needed components without diving deeply into all the details. I can use familiar for me Python language to define needed cloud resources.
+
+Lambda it is a virtual service that allows to run python code without managing insfrastructure. It takes care of all sort of administration tasks, inluding servers, software, deployment etc. Lambda scales automatically so there is no need to thinks about scalability. One of the biggest benefits of lambda is that we pay only for the compute time that python code comsumes.
+
+DynamoDB - it's a database service. It charges only for requests and storing data. So it can be configured accoring to specific needs.
+
+ApiGateway proxies requests to lambda applications. It also can handle variety of traffic management tasks. It charges only for API requests and data transfered out.
+
+All these services are fully managed by aws. All of them provide corresponding ways to scale out if needed.
+
+In this specific case  there is a test application that is not supposed to be under high load so all the services are configured to use minumum resources.

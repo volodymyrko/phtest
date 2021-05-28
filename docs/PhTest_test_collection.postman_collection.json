@@ -1,0 +1,298 @@
+{
+	"info": {
+		"_postman_id": "f7aff8cc-79d5-4a01-9723-2bd92bbcfdf5",
+		"name": "PhTest_test_collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create announcement",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('test create announcement response code', function(){",
+							"    pm.response.to.have.status(201);",
+							"})",
+							"",
+							"pm.test('test create announcement response data', function(){",
+							"    const resp = pm.response.json();",
+							"    const req_data = JSON.parse(request.data);",
+							"",
+							"    pm.expect(resp).to.have.all.keys('uuid', 'name', 'description', 'date');",
+							"",
+							"    pm.expect(resp.name).to.eql(req_data.name);",
+							"    pm.expect(resp.description).to.eql(req_data.description);",
+							"    pm.expect(resp.date).to.eql(req_data.date);",
+							"",
+							"    pm.expect(resp.uuid).to.be.a('string');",
+							"    pm.expect(resp.name).to.be.a('string');",
+							"    pm.expect(resp.description).to.be.a('string');",
+							"    pm.expect(resp.uuid).to.be.a('string');",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const moment = require('moment');",
+							"pm.variables.set(\"date\", moment().format(\"YYYY-MM-DD\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\": \"{{$randomWord}}\", \"description\": \"{{$randomWords}}\", \"date\": \"{{date}}\"}"
+				},
+				"url": {
+					"raw": "{{URL}}/announcements",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"announcements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create announcement error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('test create announcement response code', function(){",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test('test create announcement required fields', function(){",
+							"    const resp = pm.response.json();",
+							"    pm.expect(resp).has.key('error');",
+							"",
+							"    const err_keys = resp.error.map(item => {return item.loc[0]});",
+							"    pm.expect(err_keys).to.have.members(['name', 'description', 'date']);  ",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}"
+				},
+				"url": {
+					"raw": "{{URL}}/announcements",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"announcements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all announcements",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('test all announcements response code', function(){",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('test all announcements response_data', function(){",
+							"    const resp = pm.response.json();",
+							"    var schema = {",
+							"        \"type\": \"object\",",
+							"        \"required\": [\"items\"],",
+							"        \"properties\": {",
+							"            \"items\": {",
+							"                \"type\": \"array\",",
+							"                \"items\": {",
+							"                    \"type\": \"object\",",
+							"                    \"required\": [\"uuid\", \"name\", \"description\", \"date\"],",
+							"                    \"properties\": {",
+							"                        \"uuid\": {\"type\": \"string\"},",
+							"                        \"name\": {\"type\": \"string\"},",
+							"                        \"description\": {\"type\": \"string\"},",
+							"                        \"date\": {\"type\": \"string\"}",
+							"                    }",
+							"                }",
+							"            }",
+							"        }",
+							"    };",
+							"    pm.expect(tv4.validate(resp, schema)).to.be.true;",
+							"})",
+							"",
+							"pm.test('set uuid', function(){",
+							"    const resp = pm.response.json();",
+							"    pm.environment.set('uuid', resp.items[0].uuid);",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/announcements",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"announcements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get announcement",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('test get announcement response code', function(){",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('test get announcement response data', function(){",
+							"    const resp = pm.response.json();",
+							"    var schema =  {",
+							"        \"type\": \"object\",",
+							"        \"required\": [\"name\", \"description\", \"date\", \"uuid\"],",
+							"        \"properties\": {",
+							"            \"uuid\": {\"type\": \"string\"},",
+							"            \"name\": {\"type\": \"string\"},",
+							"            \"description\": {\"type\": \"string\"},",
+							"            \"date\": {\"type\": \"string\"}",
+							"        }",
+							"    };",
+							"    pm.expect(tv4.validate(resp, schema)).to.be.true;",
+							"})",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/announcements/{{uuid}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"announcements",
+						"{{uuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 announcement",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Validate response code', function(){",
+							"    pm.response.to.have.status(404);",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/announcements/non-existing-id",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"announcements",
+						"non-existing-id"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test('test response is json', function(){",
+					"    pm.response.to.be.json;",
+					"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');",
+					"})",
+					""
+				]
+			}
+		}
+	]
+}
