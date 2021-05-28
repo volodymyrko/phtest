@@ -1,7 +1,6 @@
 
 # Welcome to your CDK Python project!
 
-This is a blank project for Python development with CDK.
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
@@ -56,3 +55,13 @@ command.
  * `cdk docs`        open CDK documentation
 
 Enjoy!
+
+
+## Postman
+
+Test collection can be found here `docs/PhTest_test_collection.postman_collection.json`. Please set `URL` env veriable bofore running test.
+
+## Openapi
+
+Please find scheme here `docs/Openapi_schema.yaml`. Keep in mind that url scpecified in the schema is not revelant anymore.
+
