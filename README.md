@@ -35,6 +35,12 @@ Once the virtualenv is activated, you can install the required dependencies.
 ```
 $ pip install -r requirements.txt
 ```
+Set `AWS_ACCOUNT_ID` and `AWS_REGION` environment variables (see `app.py`)
+
+```
+export AWS_ACCOUNT_ID=<you aws account id>
+export AWS_REGION=<your aws region>
+```
 
 At this point you can now synthesize the CloudFormation template for this code.
 
