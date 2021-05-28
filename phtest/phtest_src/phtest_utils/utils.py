@@ -19,7 +19,7 @@ def validate(validation_model):
         def wrapped(event, context):
             if event['httpMethod'] == 'GET':
                 data = event.get('queryStringParameters') or {}
-            else:  # POST
+            elif event['httpMethod'] == 'POST':
                 try:
                     data = json.loads(event.get('body') or '{}')
                 except JSONDecodeError:
@@ -27,6 +27,8 @@ def validate(validation_model):
                         'status_code': 400,
                         'body': {'error': 'invalid request body'}
                     }
+            else:
+                raise Exception('GET/POST only allowed so far')
 
             try:
                 item = validation_model(**data)
